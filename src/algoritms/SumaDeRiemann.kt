@@ -2,34 +2,54 @@ package algoritms
 
 import net.objecthunter.exp4j.Expression
 import net.objecthunter.exp4j.ExpressionBuilder
-import java.util.*
+
+//fun main() {
+//    val scanner = Scanner(System.`in`)
+//    println("Ingrese una funcion f(x,y):")
+//    val exp1 = scanner.nextLine()
+//    val funcion = ExpressionBuilder(exp1)
+//            .variables("x", "y")
+//            .build()
+//
+//    println("Ingrese el valor de m:")
+//    val m = scanner.nextInt()
+//    println("Ingrese el valor de n:")
+//    val n = scanner.nextInt()
+//    println("Ingrese el valor del area:")
+//    val area = scanner.nextDouble()
+//    println("El volumen aproximado es ${calcularSumaDeRiemann(funcion, m, n, area)}")
+//}
 
 fun main() {
-    val scanner = Scanner(System.`in`)
-    println("Ingrese una funcion f(x,y): ")
-    val exp1 = scanner.nextLine()
+    val exp1 = "16-xx-2yy"
     val funcion = ExpressionBuilder(exp1)
             .variables("x", "y")
             .build()
 
-    println("Ingrese el valor de m: ")
-    val m = scanner.nextInt()
-    println("Ingrese el valor de n: ")
-    val n = scanner.nextInt()
-    println("Ingrese el valor del area: ")
-    val area = scanner.nextDouble()
-    println("El volumen aproximado es ${calcularSumaDeRiemann(funcion, m, n, area)}")
+    val vol = calcularSumaDeRiemann(funcion, 16, 16, 0.0, 2.0, 0.0, 2.0)
+    println("El volumen aproximado es $vol")
 }
 
-fun calcularSumaDeRiemann(funcion: Expression, m: Int, n: Int, area: Double): Double {
+fun calcularSumaDeRiemann(funcion: Expression, m: Int, n: Int, rangox1: Double, rangox2: Double, rangoy1: Double, rangoy2: Double): Double {
     var result = 0.0
+    // calculo el lado del area
+    val ladox = (rangox2 - rangox1) / m
+    val ladoy = (rangoy2 - rangoy1) / n
+
+    val area = ladox * ladoy
+    // comienza a iterar
+    var x = 0.0
+    var y: Double
     for (i in 1..m) {
-        funcion.setVariable("x", i.toDouble())
+        x += ladox
+        y = 0.0
+        funcion.setVariable("x", x)
         for (j in 1..n) {
-            funcion.setVariable("y", j.toDouble())
-            result += funcion.evaluate() * area
+            y += ladoy
+            funcion.setVariable("y", y)
+            result += funcion.evaluate()
         }
     }
-    return result
+    return result * area
 }
 
