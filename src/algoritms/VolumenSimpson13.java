@@ -5,7 +5,7 @@ import net.objecthunter.exp4j.ExpressionBuilder;
 
 import java.util.Scanner;
 
-public class VolumenTrapecios {
+public class VolumenSimpson13 {
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -28,7 +28,7 @@ public class VolumenTrapecios {
         System.out.println("Ingrese el valor de n en y: ");
         int n = scanner.nextInt();
         try {
-            double vol = volumenTapecios(a, b, c, d, m, n);
+            double vol = volSimpson13(a, b, c, d, m, n);
             System.out.println("Volumen aproximado en [" + a + "," + b + "],[" + c + "," + d + "] = " + vol);
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -47,34 +47,46 @@ public class VolumenTrapecios {
 
     static Expression expression;
 
-    public static double volumenTapecios(double a, double b, double c, double d, int m, int n) throws Exception {
-        if (n > 0 && m > 0 && a < b && c < d) {
-            final double h = (b - a) / m;
-            final double k = (d - c) / n;
+    public static double volSimpson13(double a, double b, double c, double d, int m, int n) throws Exception {
+        if (m >= 2 && (m % 2) == 0 && n >= 2 && (n % 2) == 0) {
+            double h = (b - a) / m;
+            double k = (d - c) / n;
 
+            double Iimpar = 0;
+            double Ipar = 0;
             double y = c;
-            double I2 = 0;
 
-            double I1 = volumenTapeciosAux(a, b, h, m, c);
+            double I0 = volSimpson13Aux(a, b, h, m, c);
             for (int i = 1; i < n; i++) {
                 y += k;
-                I2 += volumenTapeciosAux(a, b, h, m, y);
+                if (i % 2 == 1) {
+                    Iimpar += volSimpson13Aux(a, b, h, m, y);
+                } else {
+                    Ipar += volSimpson13Aux(a, b, h, m, y);
+                }
             }
-            double I3 = volumenTapeciosAux(a, b, h, m, d);
+            double In = volSimpson13Aux(a, b, h, m, d);
 
-            return k * h / 4 * (I1 + (2 * I2) + I3);
-        } else
-            throw new Exception("m y n deben ser mayor a cero");
+            return k * h / 9 * (I0 + (4 * Iimpar) + (2 * Ipar) + In);
+        } else {
+            throw new Exception("Se necesita que n y m sean mayor a dos y par para que la cantidad de volumenes sea impar, m = " + m + ", n = " + n);
+        }
     }
 
-    public static double volumenTapeciosAux(double a, double b, double h, int m, double y) {
-        double areaAux = 0;
+    public static double volSimpson13Aux(double a, double b, double h, int m, double y) {
+        double areaImpar = 0;
+        double areaPar = 0;
         double x = a;
+
         for (int i = 1; i < m; i++) {
             x += h;
-            areaAux += f(x, y);
+            if (i % 2 == 1) {
+                areaImpar += f(x, y);
+            } else {
+                areaPar += f(x, y);
+            }
         }
-        return f(a, y) + f(b, y) + (2 * areaAux);
-    }
 
+        return f(a, y) + f(b, y) + (4 * areaImpar) + (2 * areaPar);
+    }
 }
