@@ -21,12 +21,12 @@ import net.objecthunter.exp4j.ExpressionBuilder
 //}
 
 fun main() {
-    val exp1 = "16-xx-2yy"
+    val exp1 = "1-0.5xx-0.5yy"
     val funcion = ExpressionBuilder(exp1)
             .variables("x", "y")
             .build()
 
-    val vol = calcularSumaDeRiemann(funcion, 16, 16, 0.0, 2.0, 0.0, 2.0)
+    val vol = calcularSumaDeRiemann(funcion, 4, 4, 0.0, 1.0, 0.0, 1.0)
     println("El volumen aproximado es $vol")
 }
 
