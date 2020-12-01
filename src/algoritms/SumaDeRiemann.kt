@@ -2,32 +2,30 @@ package algoritms
 
 import net.objecthunter.exp4j.Expression
 import net.objecthunter.exp4j.ExpressionBuilder
-
-//fun main() {
-//    val scanner = Scanner(System.`in`)
-//    println("Ingrese una funcion f(x,y):")
-//    val exp1 = scanner.nextLine()
-//    val funcion = ExpressionBuilder(exp1)
-//            .variables("x", "y")
-//            .build()
-//
-//    println("Ingrese el valor de m:")
-//    val m = scanner.nextInt()
-//    println("Ingrese el valor de n:")
-//    val n = scanner.nextInt()
-//    println("Ingrese el valor del area:")
-//    val area = scanner.nextDouble()
-//    println("El volumen aproximado es ${calcularSumaDeRiemann(funcion, m, n, area)}")
-//}
+import java.util.*
 
 fun main() {
-    val exp1 = "1-0.5xx-0.5yy"
+    val scanner = Scanner(System.`in`)
+    println("Ingrese una funcion f(x,y):")
+    val exp1 = scanner.nextLine()
     val funcion = ExpressionBuilder(exp1)
             .variables("x", "y")
             .build()
 
-    val vol = calcularSumaDeRiemann(funcion, 4, 4, 0.0, 1.0, 0.0, 1.0)
-    println("El volumen aproximado es $vol")
+    println("Ingrese el valor de m:")
+    val m = scanner.nextInt()
+    println("Ingrese el valor de n:")
+    val n = scanner.nextInt()
+    println("Ingrese el valor del rango inicial en x:")
+    val rangox1 = scanner.nextDouble()
+    println("Ingrese el valor del rango final en x:")
+    val rangox2 = scanner.nextDouble()
+    println("Ingrese el valor del rango inicial en y:")
+    val rangoy1 = scanner.nextDouble()
+    println("Ingrese el valor del rango final en y:")
+    val rangoy2 = scanner.nextDouble()
+
+    println("El volumen aproximado es ${calcularSumaDeRiemann(funcion, m, n, rangox1, rangox2, rangoy1, rangoy2)}")
 }
 
 fun calcularSumaDeRiemann(funcion: Expression, m: Int, n: Int, rangox1: Double, rangox2: Double, rangoy1: Double, rangoy2: Double): Double {

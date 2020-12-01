@@ -25,20 +25,36 @@ fun main() {
             .variables("x", "y")
             .build()
 
-    calcularMetodoEuler(derivada, x0, y0, h, cantPuntos, cantDecimales)
+    calcularMetodoEulerModificado(derivada, x0, y0, h, cantPuntos, cantDecimales)
 }
 
-fun calcularMetodoEuler(derivada: Expression, x0: Double, y0: Double, h: Double, cantPuntos: Int, cantDecimales: Int) {
+fun calcularMetodoEulerModificado(derivada: Expression, x0: Double, y0: Double, h: Double, cantPuntos: Int, cantDecimales: Int) {
     var xi = x0
     var yi = y0
-    var yiAux: Double
+    var ecuacionPredictoria: Double
+    var ecuacionCorrecta: Double
 
     for (i in 0 until cantPuntos) {
-        yiAux = yi + (h * D(derivada, xi, yi))
-        yiAux = redondear(yiAux, cantDecimales)
-        println("y${i + 1} = y$i + (${h} * D(x${i}, y${i})) = $yi + (${h} * D($xi, $yi)) = $yiAux")
+        println("ecuacion predictoria: y*(i+1) = yi + (h * D(xi, yi))")
+        println("ecuacion correcta:    y(i+1) = yi + (h/2 * [D(xi, yi) + D(x(i+1), y*(i+1)])")
+
+        println("i = $i")
+        ecuacionPredictoria = yi + (h * D(derivada, xi, yi))
+        ecuacionPredictoria = redondear(ecuacionPredictoria, cantDecimales)
+
+        ecuacionCorrecta = yi + (h / 2 * (D(derivada, xi, yi) + D(derivada, xi + h, ecuacionPredictoria)))
+        println("y*${i + 1} " +
+                "= y$i + (h * D(x${i}, y${i})) " +
+                "= $yi + ($h * (D($xi, $yi))) = $ecuacionPredictoria")
+
+        ecuacionCorrecta = redondear(ecuacionCorrecta, cantDecimales)
+
+        println("y${i + 1} " +
+                "= y$i + (h/2 * (D(x${i}, y${i}) + D(x${i + 1}, y*${i + 1}))) " +
+                "= $yi + (${h / 2} * (D($xi, $yi) + D(${xi + h}, $ecuacionPredictoria))) = $ecuacionCorrecta")
+
         xi = redondear(xi + h, cantDecimales)
-        yi = yiAux
+        yi = ecuacionCorrecta
     }
 }
 
